@@ -162,4 +162,6 @@ void CMFCChatClientDlg::OnBnClickedConnectBut()
 	TRACE(_T("HELLO_WORLD!"));
 	TRACE("EWAEWA!");
 	TRACE("BBBT!");
+	TRACE("BBBBBT");
+	TRACE("BBBBBBBBBB");
 }
