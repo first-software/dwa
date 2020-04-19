@@ -160,4 +160,6 @@ void CMFCChatClientDlg::OnBnClickedConnectBut()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	TRACE(_T("HELLO_WORLD!"));
+	TRACE("EWAEWA!");
+	TRACE("BBBT!");
 }
