@@ -7,7 +7,7 @@
 #include "MFCChatClient.h"
 #include "MFCChatClientDlg.h"
 #include "afxdialogex.h"
-
+#include <atlbase.h>
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -59,6 +59,8 @@ CMFCChatClientDlg::CMFCChatClientDlg(CWnd* pParent /*=nullptr*/)
 void CMFCChatClientDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_RECVMSG_LIST, m_list);
+	DDX_Control(pDX, IDC_SENDMSG_EDIT, m_Send);
 }
 
 BEGIN_MESSAGE_MAP(CMFCChatClientDlg, CDialogEx)
@@ -66,6 +68,7 @@ BEGIN_MESSAGE_MAP(CMFCChatClientDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_CONNECT_BUT, &CMFCChatClientDlg::OnBnClickedConnectBut)
+	ON_BN_CLICKED(IDC_DISCONNECT_BUT, &CMFCChatClientDlg::OnBnClickedDisconnectBut)
 END_MESSAGE_MAP()
 
 
@@ -159,5 +162,24 @@ HCURSOR CMFCChatClientDlg::OnQueryDragIcon()
 void CMFCChatClientDlg::OnBnClickedConnectBut()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	CString strPort, strIp;
+	GetDlgItem(IDC_PORT_EDIT)->GetWindowText(strPort);
+	GetDlgItem(IDC_IPADDRESS)->GetWindowText(strIp);
 	
+	USES_CONVERSION;
+	LPCSTR csPort = (LPCSTR)T2A(strPort);
+	LPCSTR csIp = (LPCSTR)T2A(strIp);
+	TRACE("csPort = %s,csIp = %s", csPort, csIp);
+
+	int iPort = _ttoi(strPort);
+	int iIp = _ttoi(strIp);
+	m_socket = new CMySocket;
+	m_socket->Create(iPort,iIp);
+	
+}
+
+
+void CMFCChatClientDlg::OnBnClickedDisconnectBut()
+{
+	// TODO: 在此添加控件通知处理程序代码
 }

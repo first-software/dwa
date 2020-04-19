@@ -7,7 +7,7 @@
 #include "MFCChatService.h"
 #include "MFCChatServiceDlg.h"
 #include "afxdialogex.h"
-
+#include <atlbase.h>
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -65,6 +65,8 @@ BEGIN_MESSAGE_MAP(CMFCChatServiceDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_START_BUT, &CMFCChatServiceDlg::OnBnClickedStartBut)
+	ON_BN_CLICKED(IDC_END_BUT, &CMFCChatServiceDlg::OnBnClickedEndBut)
 END_MESSAGE_MAP()
 
 
@@ -153,3 +155,23 @@ HCURSOR CMFCChatServiceDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+
+void CMFCChatServiceDlg::OnBnClickedStartBut()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CString strPort;
+	GetDlgItem(IDC_PORT_EDIT)->GetWindowText(strPort);
+	USES_CONVERSION;
+	LPCSTR csPort = (LPCSTR)T2A(strPort);
+	TRACE("strPort = %s", csPort);
+
+	
+
+}
+
+
+void CMFCChatServiceDlg::OnBnClickedEndBut()
+{
+	// TODO: 在此添加控件通知处理程序代码
+}
