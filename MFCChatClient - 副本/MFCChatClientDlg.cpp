@@ -197,14 +197,7 @@ void CMFCChatClientDlg::OnBnClickedDisconnectBut()
 	
 }
 
-CString  CMFCChatClientDlg::CatShowMsg(CString Name,CString content) {
-	CString strTm;
-	CTime m_CatT = CTime::GetCurrentTime();
-	strTm = m_CatT.Format("%X ");
-	strTm += Name;
-	strTm += content;
-	return strTm;
-}
+
 void CMFCChatClientDlg::OnBnClickedSendmsgBut()
 {
 	// TODO: 在此添加控件通知处理程序代码
@@ -217,8 +210,7 @@ void CMFCChatClientDlg::OnBnClickedSendmsgBut()
 
 	USES_CONVERSION;
 	char* cRecv = T2A(strSend);
-	m_socket->Send(cRecv, RECVMSG_LEN, 0);
-#if 0
+	m_socket->Send(cRecv, 200, 0);
 	//时间 我 消息
 	CString str = (_T("我: "));
 	CString strTm;
@@ -226,10 +218,7 @@ void CMFCChatClientDlg::OnBnClickedSendmsgBut()
 	strTm = m_time.Format("%X ");
 	str = strTm + str;
 	str += strSend;
-#endif
-	CString Name(_T("我: "));
-	Name = CatShowMsg(Name, strSend);
-	m_list.AddString(Name);
+	m_list.AddString(str);
 	m_Send.SetSel(0, -1);
 	m_Send.Clear();
 	UpdateData(FALSE);

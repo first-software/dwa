@@ -3,8 +3,7 @@
 //
 
 #pragma once
-#define RECVMSG_LEN 1024
-#define SENDMSG_LEN 1024
+
 #include "CMySocket.h"
 // CMFCChatClientDlg 对话框
 class CMFCChatClientDlg : public CDialogEx
@@ -33,7 +32,6 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 public:
-	CString CatShowMsg(CString Name, CString content);
 	afx_msg void OnBnClickedConnectBut();
 	afx_msg void OnBnClickedDisconnectBut();
 	CMySocket* m_socket;

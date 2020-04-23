@@ -1,11 +1,11 @@
 ﻿
-// MFCChatClientDlg.cpp: 实现文件
+// MFCChatServiceDlg.cpp: 实现文件
 //
 
 #include "pch.h"
 #include "framework.h"
-#include "MFCChatClient.h"
-#include "MFCChatClientDlg.h"
+#include "MFCChatService.h"
+#include "MFCChatServiceDlg.h"
 #include "afxdialogex.h"
 #include <atlbase.h>
 #ifdef _DEBUG
@@ -46,36 +46,35 @@ BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CMFCChatClientDlg 对话框
+// CMFCChatServiceDlg 对话框
 
 
 
-CMFCChatClientDlg::CMFCChatClientDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_MFCCHATCLIENT_DIALOG, pParent)
+CMFCChatServiceDlg::CMFCChatServiceDlg(CWnd* pParent /*=nullptr*/)
+	: CDialogEx(IDD_MFCCHATSERVICE_DIALOG, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
-void CMFCChatClientDlg::DoDataExchange(CDataExchange* pDX)
+void CMFCChatServiceDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_RECVMSG_LIST, m_list);
-	DDX_Control(pDX, IDC_SENDMSG_EDIT, m_Send);
+	DDX_Control(pDX, IDC_LIST1, m_list);
 }
 
-BEGIN_MESSAGE_MAP(CMFCChatClientDlg, CDialogEx)
+BEGIN_MESSAGE_MAP(CMFCChatServiceDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_BN_CLICKED(IDC_CONNECT_BUT, &CMFCChatClientDlg::OnBnClickedConnectBut)
-	ON_BN_CLICKED(IDC_DISCONNECT_BUT, &CMFCChatClientDlg::OnBnClickedDisconnectBut)
-	ON_BN_CLICKED(IDC_SENDMSG_BUT, &CMFCChatClientDlg::OnBnClickedSendmsgBut)
+	ON_BN_CLICKED(IDC_START_BUT, &CMFCChatServiceDlg::OnBnClickedStartBut)
+	ON_BN_CLICKED(IDC_END_BUT, &CMFCChatServiceDlg::OnBnClickedEndBut)
+	ON_BN_CLICKED(IDC_SENDMSG_BUT, &CMFCChatServiceDlg::OnBnClickedSendmsgBut)
 END_MESSAGE_MAP()
 
 
-// CMFCChatClientDlg 消息处理程序
+// CMFCChatServiceDlg 消息处理程序
 
-BOOL CMFCChatClientDlg::OnInitDialog()
+BOOL CMFCChatServiceDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
@@ -106,11 +105,10 @@ BOOL CMFCChatClientDlg::OnInitDialog()
 
 	// TODO: 在此添加额外的初始化代码
 	GetDlgItem(IDC_PORT_EDIT)->SetWindowText(_T("6000"));
-	GetDlgItem(IDC_IPADDRESS)->SetWindowText(_T("127.0.0.1"));
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
-void CMFCChatClientDlg::OnSysCommand(UINT nID, LPARAM lParam)
+void CMFCChatServiceDlg::OnSysCommand(UINT nID, LPARAM lParam)
 {
 	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
 	{
@@ -127,7 +125,7 @@ void CMFCChatClientDlg::OnSysCommand(UINT nID, LPARAM lParam)
 //  来绘制该图标。  对于使用文档/视图模型的 MFC 应用程序，
 //  这将由框架自动完成。
 
-void CMFCChatClientDlg::OnPaint()
+void CMFCChatServiceDlg::OnPaint()
 {
 	if (IsIconic())
 	{
@@ -154,83 +152,62 @@ void CMFCChatClientDlg::OnPaint()
 
 //当用户拖动最小化窗口时系统调用此函数取得光标
 //显示。
-HCURSOR CMFCChatClientDlg::OnQueryDragIcon()
+HCURSOR CMFCChatServiceDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
 
 
-void CMFCChatClientDlg::OnBnClickedConnectBut()
+void CMFCChatServiceDlg::OnBnClickedStartBut()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	CString strPort, strIp;
+	CString strPort;
 	GetDlgItem(IDC_PORT_EDIT)->GetWindowText(strPort);
-	GetDlgItem(IDC_IPADDRESS)->GetWindowText(strIp);
-
 	USES_CONVERSION;
 	LPCSTR csPort = (LPCSTR)T2A(strPort);
-	LPCSTR csIp = (LPCSTR)T2A(strIp);
-	TRACE("csPort = %s,csIp = %s", csPort, csIp);
-
+	TRACE("strPort = %s", csPort);
+	m_server = new CServerSocket;
 	int iPort = _ttoi(strPort);
-	int iIp = _ttoi(strIp);
-	//创建一个Socket对象
-	m_socket = new CMySocket;
+	if (!m_server->Create(iPort)) {
+		TRACE("m_server Create err = %d", GetLastError());
+		return;
+	}
 
-	//创建一个套接字 容错
-	if (!m_socket->Create()) {
-		TRACE("create socket err=%d", GetLastError());
+	if (!m_server->Listen()) {
+		TRACE("m_server Listen err = %d", GetLastError());
 		return;
 	}
-	if (m_socket->Connect(strIp, iPort) == SOCKET_ERROR) {
-		TRACE("Connect m_socket err = %d", GetLastError());
-		return;
-	}
+	CString str;
+	m_tm = CTime::GetCurrentTime();
+	str = m_tm.Format("%X ");
+	str += _T("建立连接!");
+	m_list.AddString(str);
+	m_list.UpdateData(FALSE);
 	
 }
 
 
-void CMFCChatClientDlg::OnBnClickedDisconnectBut()
+void CMFCChatServiceDlg::OnBnClickedEndBut()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	
 }
 
-CString  CMFCChatClientDlg::CatShowMsg(CString Name,CString content) {
-	CString strTm;
-	CTime m_CatT = CTime::GetCurrentTime();
-	strTm = m_CatT.Format("%X ");
-	strTm += Name;
-	strTm += content;
-	return strTm;
-}
-void CMFCChatClientDlg::OnBnClickedSendmsgBut()
+
+void CMFCChatServiceDlg::OnBnClickedSendmsgBut()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	if (!m_socket) {
-		TRACE("m_socket NOT CREATE err = %d", GetLastError());
-		return;
-	}
 	CString strSend;
-	m_Send.GetWindowText(strSend);
-
+	GetDlgItem(IDC_SENDMSG_EDIT)->GetWindowText(strSend);
 	USES_CONVERSION;
-	char* cRecv = T2A(strSend);
-	m_socket->Send(cRecv, RECVMSG_LEN, 0);
-#if 0
-	//时间 我 消息
+	char* SendMsg = T2A(strSend);
+	m_chat->Send(SendMsg, 200, 0);
 	CString str = (_T("我: "));
-	CString strTm;
-	m_time = CTime::GetCurrentTime();
-	strTm = m_time.Format("%X ");
+	m_tm = CTime::GetCurrentTime();
+	CString strTm = m_tm.Format("%X ");
 	str = strTm + str;
 	str += strSend;
-#endif
-	CString Name(_T("我: "));
-	Name = CatShowMsg(Name, strSend);
-	m_list.AddString(Name);
-	m_Send.SetSel(0, -1);
-	m_Send.Clear();
+	m_list.AddString(str);
+	GetDlgItem(IDC_SENDMSG_EDIT)->SetWindowText(_T(""));
 	UpdateData(FALSE);
 }

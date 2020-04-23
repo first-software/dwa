@@ -1,12 +1,11 @@
 #pragma once
 #include <afxsock.h>
-class CMySocket :
+class CChatSocket :
 	public CAsyncSocket
 {
 public:
-	CMySocket();
-	virtual ~CMySocket();
-	virtual void OnConnect(int nErrorCode);
+	CChatSocket();
+	virtual ~CChatSocket();
 	virtual void OnReceive(int nErrorCode);
 };
 

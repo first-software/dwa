@@ -1,24 +1,23 @@
 ﻿//{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ 生成的包含文件。
-// 供 MFCChatService.rc 使用
+// 供 MFCChatClient.rc 使用
 //
 #define IDM_ABOUTBOX                    0x0010
 #define IDD_ABOUTBOX                    100
 #define IDS_ABOUTBOX                    101
-#define IDD_MFCCHATSERVICE_DIALOG       102
+#define IDD_MFCCHATCLIENT_DIALOG        102
 #define IDR_MAINFRAME                   128
 #define IDC_CLEARSCR_BUT                1000
-#define IDC_START_BUT                   1001
-#define IDC_SENDMSG_BUT                 1002
-#define IDC_END_BUT                     1003
-#define IDC_CALS_BUT                    1004
-#define IDC_QQ_BUT                      1005
-#define IDC_EMAIL_BUT                   1006
-#define IDC_LIST1                       1007
-#define IDC_EDIT1                       1008
-#define IDC_SENDMSG_EDIT                1008
-#define IDC_PORT_EDIT                   1009
-#define IDC_COLOR_COMBO                 1010
+#define IDC_CONNECT_BUT                 1001
+#define IDC_DISCONNECT_BUT              1002
+#define IDC_SENDMSG_BUT                 1003
+#define IDC_COLOR_COMBO                 1004
+#define IDC_RECVMSG_LIST                1005
+#define IDC_PORT_EDIT                   1006
+#define IDC_IPADDRESS                   1007
+#define IDC_SENDMSG_EDIT                1009
+#define IDC_AUTOMSG_EDIT                1010
+#define IDC_AUTOMSG_RADIO               1011
 
 // Next default values for new objects
 // 

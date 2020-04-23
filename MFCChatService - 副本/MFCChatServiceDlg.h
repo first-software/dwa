@@ -3,8 +3,7 @@
 //
 
 #pragma once
-#define RECVMSG_LEN 1024
-#define SENDMSG_LEN 1024
+
 #include "CServerSocket.h"
 #include "CChatSocket.h"
 // CMFCChatServiceDlg 对话框
@@ -41,5 +40,4 @@ public:
 	CTime m_tm;
 	CChatSocket* m_chat;
 	afx_msg void OnBnClickedSendmsgBut();
-	CString CatShowMsg(CString Name, CString content);
 };

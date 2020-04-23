@@ -59,6 +59,7 @@ CMFCChatServiceDlg::CMFCChatServiceDlg(CWnd* pParent /*=nullptr*/)
 void CMFCChatServiceDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_LIST1, m_list);
 }
 
 BEGIN_MESSAGE_MAP(CMFCChatServiceDlg, CDialogEx)
@@ -67,6 +68,7 @@ BEGIN_MESSAGE_MAP(CMFCChatServiceDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_START_BUT, &CMFCChatServiceDlg::OnBnClickedStartBut)
 	ON_BN_CLICKED(IDC_END_BUT, &CMFCChatServiceDlg::OnBnClickedEndBut)
+	ON_BN_CLICKED(IDC_SENDMSG_BUT, &CMFCChatServiceDlg::OnBnClickedSendmsgBut)
 END_MESSAGE_MAP()
 
 
@@ -102,7 +104,7 @@ BOOL CMFCChatServiceDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
-
+	GetDlgItem(IDC_PORT_EDIT)->SetWindowText(_T("6000"));
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -165,13 +167,58 @@ void CMFCChatServiceDlg::OnBnClickedStartBut()
 	USES_CONVERSION;
 	LPCSTR csPort = (LPCSTR)T2A(strPort);
 	TRACE("strPort = %s", csPort);
+	m_server = new CServerSocket;
+	int iPort = _ttoi(strPort);
+	if (!m_server->Create(iPort)) {
+		TRACE("m_server Create err = %d", GetLastError());
+		return;
+	}
 
+	if (!m_server->Listen()) {
+		TRACE("m_server Listen err = %d", GetLastError());
+		return;
+	}
+	CString str;
+	m_tm = CTime::GetCurrentTime();
+	str = m_tm.Format("%X ");
+	str += _T("建立连接!");
+	m_list.AddString(str);
+	m_list.UpdateData(FALSE);
 	
-
 }
 
 
 void CMFCChatServiceDlg::OnBnClickedEndBut()
 {
 	// TODO: 在此添加控件通知处理程序代码
+}
+
+CString CMFCChatServiceDlg::CatShowMsg(CString Name, CString content) {
+	CString strTm;
+	CTime m_CatT = CTime::GetCurrentTime();
+	strTm = m_CatT.Format("%X ");
+	strTm += Name;
+	strTm += content;
+	return strTm;
+}
+void CMFCChatServiceDlg::OnBnClickedSendmsgBut()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CString strSend;
+	GetDlgItem(IDC_SENDMSG_EDIT)->GetWindowText(strSend);
+	USES_CONVERSION;
+	char* SendMsg = T2A(strSend);
+	m_chat->Send(SendMsg,SENDMSG_LEN, 0);
+#if 0
+	CString str = (_T("我: "));
+	m_tm = CTime::GetCurrentTime();
+	CString strTm = m_tm.Format("%X ");
+	str = strTm + str;
+	str += strSend;
+#endif
+	CString Name = _T("我: ");
+	Name = CatShowMsg(Name, strSend);
+	m_list.AddString(Name);
+	GetDlgItem(IDC_SENDMSG_EDIT)->SetWindowText(_T(""));
+	UpdateData(FALSE);
 }

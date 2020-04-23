@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{C388E5B5-F963-4832-9F01-2222A271E777}</ProjectGuid>
+    <ProjectGuid>{E2189EBA-B01B-4C6A-A479-9209F7F6D5A2}</ProjectGuid>
     <Keyword>MFCProj</Keyword>
-    <RootNamespace>MFCChatService</RootNamespace>
+    <RootNamespace>MFCChatClient</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -183,20 +183,18 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="CChatSocket.h" />
-    <ClInclude Include="CServerSocket.h" />
+    <ClInclude Include="CMySocket.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="MFCChatService.h" />
-    <ClInclude Include="MFCChatServiceDlg.h" />
+    <ClInclude Include="MFCChatClient.h" />
+    <ClInclude Include="MFCChatClientDlg.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CChatSocket.cpp" />
-    <ClCompile Include="CServerSocket.cpp" />
-    <ClCompile Include="MFCChatService.cpp" />
-    <ClCompile Include="MFCChatServiceDlg.cpp" />
+    <ClCompile Include="CMySocket.cpp" />
+    <ClCompile Include="MFCChatClient.cpp" />
+    <ClCompile Include="MFCChatClientDlg.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -205,13 +203,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="MFCChatService.rc" />
+    <ResourceCompile Include="MFCChatClient.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\MFCChatService.rc2" />
+    <None Include="res\MFCChatClient.rc2" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\MFCChatService.ico" />
+    <Image Include="res\MFCChatClient.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
