@@ -41,4 +41,7 @@ public:
 	CEdit m_Send;
 	CTime m_time;
 	afx_msg void OnBnClickedSendmsgBut();
+	afx_msg void OnBnClickedInitnameBut();
+	afx_msg void OnBnClickedAutomsgRadio();
+	afx_msg void OnBnClickedClearscrBut();
 };

@@ -70,6 +70,9 @@ BEGIN_MESSAGE_MAP(CMFCChatClientDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_CONNECT_BUT, &CMFCChatClientDlg::OnBnClickedConnectBut)
 	ON_BN_CLICKED(IDC_DISCONNECT_BUT, &CMFCChatClientDlg::OnBnClickedDisconnectBut)
 	ON_BN_CLICKED(IDC_SENDMSG_BUT, &CMFCChatClientDlg::OnBnClickedSendmsgBut)
+	ON_BN_CLICKED(IDC_INITNAME_BUT, &CMFCChatClientDlg::OnBnClickedInitnameBut)
+	ON_BN_CLICKED(IDC_AUTOMSG_RADIO, &CMFCChatClientDlg::OnBnClickedAutomsgRadio)
+	ON_BN_CLICKED(IDC_CLEARSCR_BUT, &CMFCChatClientDlg::OnBnClickedClearscrBut)
 END_MESSAGE_MAP()
 
 
@@ -107,6 +110,25 @@ BOOL CMFCChatClientDlg::OnInitDialog()
 	// TODO: 在此添加额外的初始化代码
 	GetDlgItem(IDC_PORT_EDIT)->SetWindowText(_T("6000"));
 	GetDlgItem(IDC_IPADDRESS)->SetWindowText(_T("127.0.0.1"));
+
+	WCHAR chPath[MAX_PATH] = { 0 };
+	GetCurrentDirectory(MAX_PATH, chPath);
+	CString strPath;
+	strPath.Format(L"%ls//Test.ini", chPath);
+	WCHAR chText[MAX_PATH];
+	DWORD dWord = GetPrivateProfileString(_T("Client"),_T("Name"),NULL, chText,MAX_PATH,strPath);
+
+	if (dWord <= 0) {
+		WritePrivateProfileString(_T("Client"),_T("Name"),_T("客户端"),strPath);
+		SetDlgItemText(IDC_INITNAME_EDIT, _T("客户端"));
+	}
+	else {
+		SetDlgItemText(IDC_INITNAME_EDIT, chText);
+	}
+	
+	UpdateData();
+	
+
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -215,22 +237,69 @@ void CMFCChatClientDlg::OnBnClickedSendmsgBut()
 	CString strSend;
 	m_Send.GetWindowText(strSend);
 
+	
+
+	CString Name;
+	GetDlgItemText(IDC_INITNAME_EDIT,Name);
+	Name += _T(": ");
+	
+	strSend = CatShowMsg(Name, strSend);
+	
 	USES_CONVERSION;
 	char* cRecv = T2A(strSend);
 	m_socket->Send(cRecv, RECVMSG_LEN, 0);
-#if 0
-	//时间 我 消息
-	CString str = (_T("我: "));
-	CString strTm;
-	m_time = CTime::GetCurrentTime();
-	strTm = m_time.Format("%X ");
-	str = strTm + str;
-	str += strSend;
-#endif
-	CString Name(_T("我: "));
-	Name = CatShowMsg(Name, strSend);
-	m_list.AddString(Name);
+
+	m_list.AddString(strSend);
 	m_Send.SetSel(0, -1);
 	m_Send.Clear();
 	UpdateData(FALSE);
+}
+
+
+void CMFCChatClientDlg::OnBnClickedInitnameBut()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	if (IDOK == AfxMessageBox(_T("确定要修改昵称吗？"), MB_OKCANCEL)) {
+		CString Name;
+		GetDlgItemText(IDC_INITNAME_EDIT, Name);
+		if (Name.GetLength() <= 0 || Name.GetLength() > 1024) {
+			MessageBox(_T("违规昵称!"));
+			return;
+		}
+
+		CString strPath;
+		//获取当前目录名
+		WCHAR chPath[MAX_PATH] = { 0 };
+		GetCurrentDirectory(MAX_PATH, chPath);
+		strPath.Format(L"%ls//Test.ini", chPath);
+
+
+		/*LPCSTR lpAppName,//项
+			LPCSTR lpKeyName,//键
+			LPCSTR lpString,//地址
+			LPCSTR lpFileName//姓名
+			);*/
+			//配置ini表
+		WritePrivateProfileString(_T("Client"), _T("Name"), Name, strPath);
+	}
+	
+}
+
+
+void CMFCChatClientDlg::OnBnClickedAutomsgRadio()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	if (((CButton *)GetDlgItem(IDC_AUTOMSG_RADIO))->GetCheck()) {
+		((CButton*)GetDlgItem(IDC_AUTOMSG_RADIO))->SetCheck(FALSE);
+	}
+	else {
+		((CButton*)GetDlgItem(IDC_AUTOMSG_RADIO))->SetCheck(TRUE);
+	}
+}
+
+
+void CMFCChatClientDlg::OnBnClickedClearscrBut()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	m_list.ResetContent();
 }

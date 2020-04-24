@@ -69,6 +69,7 @@ BEGIN_MESSAGE_MAP(CMFCChatServiceDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_START_BUT, &CMFCChatServiceDlg::OnBnClickedStartBut)
 	ON_BN_CLICKED(IDC_END_BUT, &CMFCChatServiceDlg::OnBnClickedEndBut)
 	ON_BN_CLICKED(IDC_SENDMSG_BUT, &CMFCChatServiceDlg::OnBnClickedSendmsgBut)
+	ON_BN_CLICKED(IDC_CLEARSCR_BUT, &CMFCChatServiceDlg::OnBnClickedClearscrBut)
 END_MESSAGE_MAP()
 
 
@@ -221,4 +222,11 @@ void CMFCChatServiceDlg::OnBnClickedSendmsgBut()
 	m_list.AddString(Name);
 	GetDlgItem(IDC_SENDMSG_EDIT)->SetWindowText(_T(""));
 	UpdateData(FALSE);
+}
+
+
+void CMFCChatServiceDlg::OnBnClickedClearscrBut()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	m_list.ResetContent();
 }

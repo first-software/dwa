@@ -42,4 +42,5 @@ public:
 	CChatSocket* m_chat;
 	afx_msg void OnBnClickedSendmsgBut();
 	CString CatShowMsg(CString Name, CString content);
+	afx_msg void OnBnClickedClearscrBut();
 };

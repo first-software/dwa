@@ -35,17 +35,22 @@ void CMySocket::OnReceive(int nErrorCode)
 	Receive(RecvBuff, RECVMSG_LEN, 0);
 	USES_CONVERSION;
 	CString strRecv = (CString)A2T(RecvBuff);
-#if 0
-	CString str = (_T("服务端: "));
-	CString strTm;
-	dlg->m_time = CTime::GetCurrentTime();
-	strTm = dlg->m_time.Format("%X ");
-	str = strTm + str;
-	str += strRecv;
-	dlg->m_list.AddString(str);
-#endif
 	CString Name = _T("服务端: ");
 	Name = dlg->CatShowMsg(Name, strRecv);
 	dlg->m_list.AddString(Name);
+
+	//自动回复 时间 姓名: [自动回复] 自动回复内容
+
+	if (BST_CHECKED == ((CButton*)dlg->GetDlgItem(IDC_AUTOMSG_RADIO))->GetCheck()) {
+		CString strAutoMsg;
+		dlg->GetDlgItemText(IDC_AUTOMSG_EDIT, strAutoMsg);
+		strAutoMsg = _T("[自动回复]: ")+ strAutoMsg;
+		dlg->GetDlgItemText(IDC_INITNAME_EDIT, Name);
+		Name = dlg->CatShowMsg(Name,strAutoMsg);
+		char* SendBuff = T2A(Name);
+		Send(SendBuff, SENDMSG_LEN, 0);
+		dlg->m_list.AddString(Name);
+	}
+	
 	CAsyncSocket::OnReceive(nErrorCode);
 }
