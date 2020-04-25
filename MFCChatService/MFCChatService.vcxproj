@@ -211,6 +211,8 @@
     <None Include="res\MFCChatService.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="D:\Pictures\68f69d59d61285b5.bmp" />
+    <Image Include="res\bitmap1.bmp" />
     <Image Include="res\MFCChatService.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

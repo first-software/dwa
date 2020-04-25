@@ -41,7 +41,7 @@ void CMySocket::OnReceive(int nErrorCode)
 
 	//自动回复 时间 姓名: [自动回复] 自动回复内容
 
-	if (BST_CHECKED == ((CButton*)dlg->GetDlgItem(IDC_AUTOMSG_RADIO))->GetCheck()) {
+	if (BST_CHECKED == ((CButton*)dlg->GetDlgItem(IDC_AUTOMSG_CHECK))->GetCheck()) {
 		CString strAutoMsg;
 		dlg->GetDlgItemText(IDC_AUTOMSG_EDIT, strAutoMsg);
 		strAutoMsg = _T("[自动回复]: ")+ strAutoMsg;

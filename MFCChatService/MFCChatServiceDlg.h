@@ -43,4 +43,11 @@ public:
 	afx_msg void OnBnClickedSendmsgBut();
 	CString CatShowMsg(CString Name, CString content);
 	afx_msg void OnBnClickedClearscrBut();
+	CComboBox m_TextColorCom;
+	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
+	afx_msg void OnBnClickedQqBut();
+//	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnBnClickedEmailBut();
+	afx_msg void OnBnClickedCalsBut();
 };

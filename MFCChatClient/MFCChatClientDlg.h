@@ -42,6 +42,10 @@ public:
 	CTime m_time;
 	afx_msg void OnBnClickedSendmsgBut();
 	afx_msg void OnBnClickedInitnameBut();
-	afx_msg void OnBnClickedAutomsgRadio();
+	//afx_msg void OnBnClickedAutomsgRadio();
 	afx_msg void OnBnClickedClearscrBut();
+	afx_msg void OnBnClickedAutomsgCheck();
+	CComboBox m_TextColorCom;
+	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };
